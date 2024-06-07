@@ -1,17 +1,14 @@
 # zip
 
 #### 介绍
-封装archiver和yauzl的压缩解压工具包，简洁api
+封装简化node的压缩解压库，提供简洁api
 
 #### 软件架构
-软件架构说明
+对archiver和yauzl库封装的，压缩解压库，简洁易用
 
 
 #### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+npm i @ginreo/zip
 
 #### 使用说明
 
