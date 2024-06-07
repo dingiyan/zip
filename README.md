@@ -1,20 +1,90 @@
 # zip
 
 #### 介绍
-封装简化node的压缩解压库，提供简洁api
+
+封装简化 node 的压缩解压库，提供简洁 api
 
 #### 软件架构
-对archiver和yauzl库封装的，压缩解压库，简洁易用
 
+对 archiver 和 yauzl 库封装的，压缩解压库
 
 #### 安装教程
+
+```
 npm i @ginreo/zip
+```
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+-   zip
+
+```ts
+import { Ziper } from "@ginreo/zip";
+const ziper = Ziper.init("./test.zip");
+ziper.addFile("./package.json");
+ziper.addFile("./tsconfig.json", "tsconfig2.json");
+ziper.addFile("./.gitignore", ".gitignore");
+await ziper.zip();
+if (fs.existsSync("./test.zip")) {
+}
+```
+
+-   unzip
+
+```ts
+import { Unziper, Ziper } from "@ginreo/zip";
+const ziper = Ziper.init("./test2.zip");
+ziper.addFile("./package.json");
+ziper.addFile("./tsconfig.json", "tsconfig2.json");
+await ziper.zip();
+if (!fs.existsSync("./test2.zip")) {
+	assert.fail(`create zip file fail`);
+}
+const unziper = Unziper.init("./test2.zip", "./test2");
+await unziper.unzip();
+if (fs.existsSync("./test2/package.json") && fs.existsSync("./test2/tsconfig2.json")) {
+	assert.ok(true);
+	// 清理测试文件
+	fs.unlinkSync("./test2.zip");
+	setTimeout(() => {
+		fs.rmSync("./test2", { recursive: true, force: true });
+	}, 10);
+
+	return;
+}
+```
+
+-   unzip extract one file
+
+```ts
+import { Unziper, Ziper } from "@ginreo/zip";
+const ziper = Ziper.init("./test2.zip");
+ziper.addFile("./package.json");
+const ziper = Ziper.init("./test3.zip");
+ziper.addFile("./package.json");
+ziper.addFile("./tsconfig.json", "a/b/c/tsconfig2.json");
+await ziper.zip();
+if (!fs.existsSync("./test3.zip")) {
+	assert.fail(`create zip file fail`);
+}
+const unziper = Unziper.init("./test3.zip", "./test3");
+
+// 提取以config2.json结尾的文件 返回提取出的文件的路径
+const unzipFilePath = await unziper.extractOne("config2.json");
+// console.log(unzipFilePath);
+
+if (fs.existsSync(unzipFilePath)) {
+	assert.ok(true);
+	// 清理测试文件
+	fs.unlinkSync("./test3.zip");
+	setTimeout(() => {
+		fs.rmSync("./test3", { recursive: true, force: true });
+	}, 10);
+
+	return;
+}
+assert.fail(`unzip extract one file fail`);
+```
 
 #### 参与贡献
 
@@ -22,13 +92,3 @@ npm i @ginreo/zip
 2.  新建 Feat_xxx 分支
 3.  提交代码
 4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)

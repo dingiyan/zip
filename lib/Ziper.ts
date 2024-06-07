@@ -6,8 +6,8 @@ import { Writable } from "stream";
 
 /** 压缩文件 */
 export class Ziper {
-	protected originTarget: string | Writable;
-	protected target: Writable;
+	protected originTarget?: string | Writable;
+	protected target?: Writable;
 	private logger: (str: string, ...params: any[]) => void = (str: string, ...params: any[]) => {
 		console.log(str, ...params);
 	};
@@ -15,10 +15,10 @@ export class Ziper {
 	public archive: archiver.Archiver;
 	/**
 	 * Creates an instance of Ziper.
-	 * @param {(string | Writable)} target 要写入的可写流，可传入字符串文件路径，自动转为文件流
+	 * @param {(string | Writable | undefined)} target 要写入的可写流，可传入字符串文件路径，自动转为文件流
 	 * @memberof Ziper
 	 */
-	constructor(target: string | Writable) {
+	constructor(target?: string | Writable) {
 		this.originTarget = target;
 		if (typeof target === "string") {
 			this.target = fs.createWriteStream(target);
@@ -32,18 +32,22 @@ export class Ziper {
 	}
 
 	/**
-	 *
+	 * create an Ziper instnace
 	 *
 	 * @static
-	 * @param {(string | Writable)} target 要写入的可写流，可传入字符串文件路径，自动转为文件流
+	 * @param {(string | Writable | undefined)} target will write to stream, provide string will auto create fs.WriteStream
 	 * @return {*}
 	 * @memberof Ziper
 	 */
-	static init(target: string | Writable) {
+	static init(target?: string | Writable) {
 		return new Ziper(target);
 	}
 
-	/** 添加完文件后，执行此方法进行make zip文件，并写入可写流 */
+	/**
+	 * last call this method  for make zip file, after addFile append or glob
+	 *
+	 * will pipe to your given writeStream, if you want use your another stream, you can not call this method
+	 */
 	async zip() {
 		return new Promise<string | Writable | null>((resolve, reject) => {
 			if (!this.target) return resolve(null); // 如果target为空，相当于此方法没用，用户应该自行实现stream pipe处理，同时参考此方法on error和最后finalize
@@ -90,10 +94,10 @@ export class Ziper {
 
 	/**
 	 *
-	 * 添加目录进入压缩包
+	 * add whole directory into zip
 	 *
-	 * @param {string} dirPath 源目录路径
-	 * @param {(string | false)} zipDir 压缩包内放置路径，false则直接将dirPath内文件放在zip顶层
+	 * @param {string} dirPath origin dir path
+	 * @param {(string | false)} zipDir zip file inner path, if `false` will save files to zip file top level(no parent directory) 
 	 * @param {archiver.EntryData} [option] 可选配置
 	 * @memberof Ziper
 	 */
@@ -121,7 +125,7 @@ export class Ziper {
 		);
 	}
 
-	/** 设置日志回调函数 */
+	/** set the logger callback function */
 	setLogger(logger: (str: string, ...params: any[]) => void) {
 		this.logger = logger;
 	}

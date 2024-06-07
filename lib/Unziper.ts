@@ -3,29 +3,32 @@ import * as yauzl from "yauzl";
 import * as fs from "fs";
 import * as path from "path";
 
-/** 解压zip文件 */
+/** unzip zip file */
 export class Unziper {
 	private logger: (str: string, ...params: any[]) => void = (str: string, ...params: any[]) => {
 		console.log(str, ...params);
 	};
 	/**
 	 * Creates an instance of Unziper.
-	 * @param {string} origin 要解压的文件path
-	 * @param {string} targetDirPath 解压目标目录（若无，将自动创建）
+	 * @param {string}  origin will unzip file path
+	 * @param {string} targetDirPath unzip to target directory path, if not exist, will create it
 	 * @memberof Unziper
 	 */
 	constructor(private origin: string, private targetDirPath: string) {
+		if (!fs.existsSync(origin)) {
+			throw new Error(`not found the file:${origin}`);
+		}
 		if (!fs.existsSync(targetDirPath)) {
 			fs.mkdirSync(targetDirPath);
 		}
 	}
 
 	/**
-	 * 创建解压对象实例
+	 * create an unzip instance object
 	 *
 	 * @static
-	 * @param {string} origin 要解压的文件path
-	 * @param {string} targetDirPath 解压目标目录（若无，将自动创建）
+	 * @param {string} origin will unzip file path
+	 * @param {string} targetDirPath unzip to target directory path, if not exist, will create it
 	 * @return {*}
 	 * @memberof Unziper
 	 */
@@ -134,7 +137,7 @@ export class Unziper {
 	 *
 	 * extract one file
 	 *
-	 * @param {string} tailPath the tail path, will stop once find the tail path match
+	 * @param {string} tailPath the tail path, will stop once matched the tail path
 	 * @return {*}
 	 * @memberof Unziper
 	 */
