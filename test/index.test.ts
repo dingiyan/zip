@@ -80,4 +80,11 @@ describe("test suite", async () => {
 		}
 		assert.fail(`unzip extract one file fail`);
 	});
+
+	it("test unzip big file", { skip: false }, async () => {
+		if (!fs.existsSync("./1.zip")) return;
+		const unziper = Unziper.init("./1.zip", "./1");
+		await unziper.unzip();
+		assert.ok(true);
+	});
 });
