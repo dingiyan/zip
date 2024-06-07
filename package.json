@@ -1,11 +1,13 @@
 {
   "name": "@ginreo/zip",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "packaging archiver & yauzl for zip unzip.",
   "main": "index.js",
   "scripts": {
     "test": "tsc && node --test && npm run clean",
-    "clean": "tsc -b --clean"
+    "clean": "tsc -b --clean",
+    "build": "tsc",
+    "release": "npm run build && npm publish --access public"
   },
   "repository": {
     "type": "git",
