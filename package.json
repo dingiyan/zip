@@ -4,7 +4,8 @@
   "description": "packaging archiver & yauzl for zip unzip.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "tsc && node --test && npm run clean",
+    "clean": "tsc -b --clean"
   },
   "repository": {
     "type": "git",
@@ -21,19 +22,21 @@
   "files": [
     "index.js",
     "index.d.ts",
-    "index.js.map",
+    "/lib/**/*.js",
+    "/lib/**/*.d.ts",
     "package.json",
     "README.md",
     "LICENSE",
     "tsconfig.json"
   ],
   "dependencies": {
-    "archiver": "^7.0.1",
-    "yauzl": "^3.1.3",
     "@types/archiver": "^6.0.2",
-    "@types/yauzl": "^2.10.3"
+    "@types/yauzl": "^2.10.3",
+    "archiver": "^7.0.1",
+    "yauzl": "^3.1.3"
   },
   "devDependencies": {
-    "@types/node": "^20.14.2"
+    "@types/node": "^20.14.2",
+    "typescript": "^5.4.5"
   }
 }
