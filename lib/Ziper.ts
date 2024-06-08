@@ -4,6 +4,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { Writable } from "stream";
 
+type ZlibOptions = archiver.ZipOptions["zlib"];
+
 /** 压缩文件 */
 export class Ziper {
 	protected originTarget?: string | Writable;
@@ -18,14 +20,14 @@ export class Ziper {
 	 * @param {(string | Writable | undefined)} target 要写入的可写流，可传入字符串文件路径，自动转为文件流
 	 * @memberof Ziper
 	 */
-	constructor(target?: string | Writable) {
+	constructor(target?: string | Writable, zlibOptions?: ZlibOptions) {
 		this.originTarget = target;
 		if (typeof target === "string") {
 			this.target = fs.createWriteStream(target);
 		} else {
 			this.target = target;
 		}
-		this.archive = archiver("zip", { zlib: { level: 9 } });
+		this.archive = archiver("zip", { zlib: { level: 9, ...(zlibOptions || {}) } });
 		this.archive.on("warning", (data) => {
 			this.logger("archive warning %s", data);
 		});
@@ -39,8 +41,8 @@ export class Ziper {
 	 * @return {*}
 	 * @memberof Ziper
 	 */
-	static init(target?: string | Writable) {
-		return new Ziper(target);
+	static init(target?: string | Writable, zlibOptions?: ZlibOptions) {
+		return new Ziper(target, zlibOptions);
 	}
 
 	/**
@@ -97,7 +99,7 @@ export class Ziper {
 	 * add whole directory into zip
 	 *
 	 * @param {string} dirPath origin dir path
-	 * @param {(string | false)} zipDir zip file inner path, if `false` will save files to zip file top level(no parent directory) 
+	 * @param {(string | false)} zipDir zip file inner path, if `false` will save files to zip file top level(no parent directory)
 	 * @param {archiver.EntryData} [option] 可选配置
 	 * @memberof Ziper
 	 */
