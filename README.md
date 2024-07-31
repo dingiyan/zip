@@ -86,6 +86,8 @@ if (fs.existsSync(unzipFilePath)) {
 assert.fail(`unzip extract one file fail`);
 ```
 
+更多用法可参考: [test case](./test/index.test.ts)
+
 #### 参与贡献
 
 1.  Fork 本仓库
