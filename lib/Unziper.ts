@@ -266,7 +266,7 @@ export class Unziper {
 		return targetDirPath;
 	}
 
-	/** 设置日志回调函数 */
+	/** set the logger callback */
 	setLogger(logger: (str: string, ...params: any[]) => void) {
 		this.logger = logger;
 	}

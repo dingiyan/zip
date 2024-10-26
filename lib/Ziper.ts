@@ -6,7 +6,7 @@ import { Writable } from "stream";
 
 type ZlibOptions = archiver.ZipOptions["zlib"];
 
-/** 压缩文件 */
+/** compress and archive the file. */
 export class Ziper {
 	protected originTarget?: string | Writable;
 	protected target?: Writable;
@@ -64,10 +64,10 @@ export class Ziper {
 	}
 
 	/**
-	 * 添加文件进入压缩包
+	 * add one file to zip
 	 *
-	 * @param {string} filePath 文件路径string，最好提供全路径
-	 * @param {string} [zipFileName] 可选，压缩包内的文件名，可包括目录路径
+	 * @param {string} filePath the file local path, suggest absolute path
+	 * @param {string} [zipFileName] optional, the zip file inner fileName, include directory name, like /a/b/c.jpg
 	 * @memberof Ziper
 	 */
 	addFile(filePath: string, zipFileName?: string, option?: archiver.EntryData) {
@@ -100,7 +100,7 @@ export class Ziper {
 	 *
 	 * @param {string} dirPath origin dir path
 	 * @param {(string | false)} zipDir zip file inner path, if `false` will save files to zip file top level(no parent directory)
-	 * @param {archiver.EntryData} [option] 可选配置
+	 * @param {archiver.EntryData} [option] optional config
 	 * @memberof Ziper
 	 */
 	directory(dirPath: string, zipDir: string | false, option?: archiver.EntryData) {
